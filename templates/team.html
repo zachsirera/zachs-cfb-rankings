@@ -1,0 +1,62 @@
+{% extends "layout.html" %}
+
+{% block title %}
+	{{ team.team }}
+{% endblock %}
+
+{% block main %}
+
+	<br>
+	<nav aria-label="breadcrumb">
+	  <ol class="breadcrumb">
+	    <li class="breadcrumb-item"><a href={{ url_for('all_teams') }}>FBS</a></li>
+	    <li class="breadcrumb-item"><a href={{ url_for('conference', conference = team.conference) }}>{{ team.conference }}</a></li>
+	    <li class="breadcrumb-item active" aria-current="page">{{ team.team }}</li>
+	  </ol>
+	</nav>
+
+
+
+	<br>
+	<h1> # {{ team.rank }} - {{ team.team }} </h1>
+	<h4> Record: {{ team.wins }} - {{ team.losses }} </h4>
+	<h4> {{ team.points }} points </h4>
+
+	<table class="table table-hover">
+		<thead class="thead-dark">
+			<tr>
+				<th scope="col"> Date </th>
+				<th scope="col"> Opponent </th>
+				<th scope="col" style="text-align: center"> Outcome </th>
+				<th scope="col" style="text-align: center"> Points For </th>
+				<th scope="col" style="text-align: center"> Points Against </th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for game in game_list %}
+			<tr> 
+				<td> {{ game.date }} </td>
+				<td>
+					<a href={{ url_for('team', team = game.opponent) }} style="color: #3656c9">
+						# {{ game.opponent_rank }} - {{ game.opponent }}
+					</a>
+				</td>
+				<td style="text-align: center"> {{ game.outcome }} </td>
+				<td style="text-align: center"> {{ game.points_for }} </td>
+				<td style="text-align: center"> {{ game.points_against }} </td>
+			</tr>
+			{% endfor %}
+			<tr style="background-color: #E8ECEF">
+				<td> <strong> Avg </strong> </td>
+				<td> </td>
+				<td> </td>
+				<td style="text-align: center"> <strong> {{ team.avg_pf }} </strong> </td>
+				<td style="text-align: center"> <strong> {{ team.avg_pa }} </strong> </td>
+			</tr>
+		</tbody>
+	</table>
+	
+
+{% endblock %}
+
+

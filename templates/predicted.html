@@ -1,0 +1,86 @@
+{% extends "layout.html" %}
+
+{% block title %}
+	Predict
+{% endblock %}
+
+{% block main %}
+	
+	<br> <br>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col">
+				<h3> In a matchup between {{ results.team1 }} and {{ results.team2 }} </h3>
+				<p> This model assigns <strong> {{ results.favored }} </strong> a <strong>{{ results.probability }}% </strong> chance of winning. </p>
+				<p> The most likely scoring outcome is: </p>
+				<br>
+				<p> Spread    -    <strong> {{ results.spread }} </strong> </p>
+				<br>
+			</div>
+			<div class="col-1">
+		    </div>
+			<div class="col">
+				<div class="row">
+					<h3> 
+						<a href={{ url_for('team', team = results.team1) }} style="color: #3656c9">
+							{{ results.team1 }}
+						</a>
+						 so far this season 
+					</h3>
+					<table class="table table-sm">
+						<thead class="thead-dark">
+							<tr>
+								<th scope="col"></th>
+								<th scope="col">Points For</th>
+								<th scope="col">Points Against</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<th scope="row">Ave</th>
+								<td>{{ team1.PF_avg }}</td>
+								<td>{{ team1.PA_avg }}</td>
+							</tr>
+							<tr>
+								<th scope="row">St. Dev</th>
+								<td>{{ team1.PF_SD }}</td>
+								<td>{{ team1.PA_SD }}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<br> <br>
+				<div class="row">
+					<h3> 
+					<a href={{ url_for('team', team = results.team2) }} style="color: #3656c9">
+							{{ results.team2 }}
+						</a>
+						 so far this season 
+					</h3>
+					<table class="table table-sm table-hover">
+						<thead class="thead-dark">
+							<tr>
+								<th scope="col"></th>
+								<th scope="col">Points For</th>
+								<th scope="col">Points Against</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<th scope="row">Ave</th>
+								<td>{{ team2.PF_avg }}</td>
+								<td>{{ team2.PA_avg }}</td>
+							</tr>
+							<tr>
+								<th scope="row">St. Dev</th>
+								<td>{{ team2.PF_SD }}</td>
+								<td>{{ team2.PA_SD }}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+
+{% endblock %}

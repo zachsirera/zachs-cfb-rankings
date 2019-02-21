@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+
+{% block title %}
+	All Games
+{% endblock %}
+
+{% block main %}
+<br>
+<table class="table table-sm table-hover">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col"> Date </th>
+      <th scope="col"> Winning Team </th>
+      <th scope="col"> Score </th>
+      <th scope="col"> Points Earned</th>
+      <th scope="col"> Losing Team </th>
+      <th scope="col"> Score </th>
+      <th scope="col"> Points Earned</th>
+    </tr>
+  </thead>
+  <tbody>
+    	{% for game in games %}
+		<tr>
+			<td> {{ game[4] }} </td>
+			<td> 
+				<a href={{ url_for('team', team = game[0]) }} style="color: #3656c9">
+						{{ game[0] }}
+				</a>
+			</td>
+			<td> {{ game[1] }} </td>
+			<td> {{ game[10] }} </td>
+			<td> 
+				<a href={{ url_for('team', team = game[2]) }} style="color: #3656c9">
+						{{ game[2] }}
+				</a> 
+			</td>
+			<td> {{ game[3] }} </td>
+			<td> {{ game[11] }} </td>
+		</tr>
+	{% endfor %}
+  </tbody>
+</table>
+{% endblock %}
+
+
+

@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+{% block title %}
+	Predict
+{% endblock %}
+
+{% block main %}
+	<br>
+	<h4> Predict the outcome of two teams</h4>
+	<p> Use this ranking algorithm to predict the most likely scoring outcome in a matchup between two teams. </p>
+
+	<form action="/predict" method="post">
+		<div class="form-group">
+			<select name="team1">
+				{% for team in fbs_teams %}
+					<option value="{{ team }}"> {{ team }} </option>
+				{% endfor %}
+			</select>
+		</div>
+		<p> vs. </p>
+		<div class="form-group">
+			<select name="team2">
+				{% for team in fbs_teams %}
+					<option value="{{ team }}"> {{ team }} </option>
+				{% endfor %}
+			</select>
+		</div>
+		<button class="btn btn-secondary" type="submit"> Predict </button>
+	</form>
+	
+
+
+{% endblock %}

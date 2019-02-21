@@ -1,0 +1,12 @@
+
+.align-right {
+	position: absolute;
+    right: -10px
+}
+
+#footer {
+	position: absolute;
+	bottom: 0px;
+}
+
+

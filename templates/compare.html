@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+
+{% block title %} 
+	Zach's CFB Poll
+{% endblock %}
+
+{% block main %}
+
+<br>
+
+
+
+<div class="container" style="width: 80%">
+	<h3> Compare - Zach's Poll vs {{ Poll }} </h3>
+	<br>
+	<table class="table table-hover table-bordered">
+		<thead class="thead-dark">
+			<tr>
+				<th scope="col"> Rank </th>
+				<th scope="col"> Zach's Poll </th>
+				<th scope="col"> {{ Poll }} </th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for row in table %}
+				<tr>
+					<td> {{ row['rank'] }} </td>
+					<td> 
+						<a href={{ url_for('team', team = row['zachs']) }} style="color: #3656c9">
+							{{ row['zachs'] }} 
+						</a>
+					</td>
+					<td> 
+						{{ row['other'] }} 
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
+	
+{% endblock %}

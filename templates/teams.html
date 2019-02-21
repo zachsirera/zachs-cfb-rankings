@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+
+{% block title %} 
+	All Teams
+{% endblock %}
+
+{% block main %}
+
+<br>
+
+
+
+<div class="container" style="width: 80%">
+
+	{% if conference %}
+
+	<h1> {{ conference }} </h1>
+	
+	{% endif %}
+
+	<table class="table table-hover table-bordered">
+		<thead class="thead-dark">
+			<tr>
+				<th scope="col"> Team </th>
+				<th scope="col"> Rank </th>
+				<th scope="col"> Record </th>
+				<th scope="col"> Points </th>
+				<th scope="col"> SOS </th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for team in rankings %}
+				<tr>
+					<td> 
+						<a href={{ url_for('team', team = team[0]) }} style="color: #3656c9">
+							{{ team[0] }} 
+						</a>
+					</td>
+					<td> {{ team[4] }} </td>
+					<td> {{ team[1] }} - {{ team[2] }} </td>
+					<td> {{ team[3] }} </td>
+					<td> {{ team[10] }}
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
+	
+{% endblock %}

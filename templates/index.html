@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+{% block title %}
+	Top 25
+{% endblock %}
+
+{% block main %}
+	<table style="margin-left:16%; padding: 100px; top: 18.75%;">
+		<tr style="font-size:160%;">
+            <th> Team </th>
+            <th> Rank </th>
+            <th> Record </th>
+            <th> Points </th>
+
+        </tr>
+	{% for key, value in rankings.iterrows() %}
+		<tr>
+			<td> {{ value['Team'] }} </td>
+			<td> {{ value['Rank'] }} </td>
+			<td> {{ value['Wins'] }} - {{ value['Losses'] }} </td>
+			<td> {{ value['Points'] }} </td>
+
+		</tr>
+	{% endfor %}
+	</table>
+{% endblock %}

@@ -1,0 +1,5 @@
+ec2-107-20-211-10.compute-1.amazonaws.com
+dad9gr1av0t9s2 
+hdfkszznvvvgmf
+3589de063f0bdeccb5753ead4569de85406be117048160c2dec74524f758a96a
+postgres://hdfkszznvvvgmf:3589de063f0bdeccb5753ead4569de85406be117048160c2dec74524f758a96a@ec2-107-20-211-10.compute-1.amazonaws.com:5432/dad9gr1av0t9s2
