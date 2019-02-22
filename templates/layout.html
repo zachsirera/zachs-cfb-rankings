@@ -87,7 +87,8 @@
           <a class="nav-link" href="/predict" style="color: white !important;"> Outcome Prediction </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/update" style="color: white !important;"> Update </a>
+          <!-- This button is disabled for now. No need to update stats in the offseason -->
+          <a class="nav-link" style="color: white !important;"> Update </a>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: white !important;">
@@ -138,7 +139,7 @@
   <div id="footer">
     <div class="card">
       <div class="card-body" id="footer-text">
-        Created in 2018 by Zach Sirera. 
+        Created in 2018 by Zach Sirera with Flask, Python, SQL, and Bootstrap. 
         <a href={{ url_for('method') }} style="color: #747e8a"> Poll Methodology </a> 
       </div>
     </div>
