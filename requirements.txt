@@ -3,7 +3,7 @@ psycopg2==2.7.5
 urllib3==1.23
 datetime==4.3
 flask==1.0.2
-flask_sessio==0.3.1
+flask_session==0.3.1
 sqlalchemy==1.2.12
 lxml==4.2.5
 requests==2.19.1
