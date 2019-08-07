@@ -428,6 +428,9 @@ def SOR():
 	# Commit changes to database
 	conn.commit()
 
+
+
+
 def points():
 	""" Calculate the number a points a team should earn for their performance based on style and SOR """
 
@@ -496,6 +499,8 @@ def points():
 	    cursor.execute("UPDATE teams SET points = %s WHERE team = %s", (team_points, team))
 
 	conn.commit()
+
+
 
 
 def rank():
@@ -634,6 +639,9 @@ def top_25():
 	
 	return render_template("teams.html", rankings = rows, updated = updated)
 
+
+
+
 @app.route('/update', methods=['GET'])
 def update():
 	""" Update all databases with data from the most recent games and recalculate the necessary stats """
@@ -655,6 +663,9 @@ def update():
 	return redirect('/')
 
 
+
+
+
 @app.route('/teams', methods=['GET', 'POST'])
 def all_teams():
 	""" This route will display a table of all 128 FBS teams and their records, ranks, and scores. """
@@ -665,6 +676,8 @@ def all_teams():
 	rows.sort(key=lambda x: x[4])
 	
 	return render_template("teams.html", rankings = rows, updated = updated)
+
+
 
 
 @app.route('/games', methods=['GET', 'POST'])
@@ -679,6 +692,8 @@ def all_games():
 	return render_template("games.html", games = rows, updated = updated)
 
 
+
+
 @app.route('/chart', methods=['GET', 'POST'])
 def chart():
 	""" This route will generate a bar graph to graphically depict the score breakdown of the top 25 """
@@ -689,11 +704,15 @@ def chart():
 	return render_template("chart.html")
 
 
+
+
 @app.route('/method', methods=['GET'])
 def method():
 	""" This route will display the poll methodology document """
 
 	return render_template("method.html")
+
+
 
 
 @app.route('/predict', methods=['GET', 'POST'])
@@ -781,6 +800,8 @@ def predict():
 
 		# Render the predicted template
 		return render_template("predicted.html", results = outcome_obj, team1 = team1_obj, team2 = team2_obj)
+
+
 
 @app.route("/team/<team>", methods = ['GET', 'POST'])
 def team(team):
@@ -879,6 +900,10 @@ def team(team):
 	# Render the team template with the necessary team info
 	return render_template("team.html", team = team_obj, game_list = games_list_sorted)
 
+
+
+
+
 @app.route("/conference/<conference>", methods = ['GET'])
 def conference(conference):
 	''' Display the rankings of all members of a conference '''
@@ -889,6 +914,8 @@ def conference(conference):
 	rows.sort(key=lambda x: x[4])
 	
 	return render_template("teams.html", rankings = rows, updated = updated, conference = conference)
+
+
 
 	
 @app.route("/search", methods = ['POST'])
@@ -904,6 +931,9 @@ def search():
 	else:
 		return redirect(url_for('team', team = search_team))
 	
+
+
+
 @app.route("/compare/<poll>", methods = ['GET'])
 def compare(poll):
 	''' Compare the results of the poll to other established polls in the sport '''
@@ -1009,6 +1039,7 @@ def compare(poll):
 
 	# Render this data in a template
 	return render_template("compare.html", Poll = poll, table = comparison)
+
 
 
 
