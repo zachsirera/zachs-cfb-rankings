@@ -73,11 +73,12 @@ global updated
 updated = arrow.now().format('YYYY-MM-DD')
 
 
-def games():
+def games(year):
 	""" Parse game data from masseyratings.com and pass it into the games db """
 
-	# Get score data for all games of P5 schools using html from lxml 
-	page  = requests.get('https://www.masseyratings.com/scores.php?s=300937&sub=11604&all=1')
+	# Get score data for all games of P5 schools using html from lxml
+	# This is the link for Massey's 2019 Data. 
+	page  = requests.get('https://www.masseyratings.com/scores.php?s=308075&sub=11604&all=1')
 	scores = html.fromstring(page.content)
 	games = scores.xpath('//pre/text()')
 	games_list = "--".join(games)
@@ -102,6 +103,7 @@ def games():
 		team2conf = helpers.conf(team2)
 		team1tier = helpers.tier(team1conf)
 		team2tier = helpers.tier(team2conf)
+		year = year 
 
 		# Look for games that feature the winning team on the day played, ie only insert new games. 
 		cursor.execute("SELECT * FROM games WHERE winning_team = %s AND game_date = %s", (team1, date))
@@ -109,8 +111,8 @@ def games():
 
 		# Add new games to games db.
 		if cursor.rowcount == 0:
-			cursor.execute("""INSERT INTO games (winning_team, winning_score, losing_team, losing_score, game_date, winning_location)
-							VALUES (%s, %s, %s, %s, %s,%s)""", (team1, score1, team2, score2, date, location))
+			cursor.execute("""INSERT INTO games (winning_team, winning_score, losing_team, losing_score, game_date, winning_location, year)
+							VALUES (%s, %s, %s, %s, %s, %s, %s)""", (team1, score1, team2, score2, date, location, year))
 
 			# Add wins to each team's record in teams db
 			cursor.execute("SELECT wins FROM teams WHERE team = %s", (team1,))
@@ -134,6 +136,8 @@ def games():
 def performance():
 	""" Compile previous performance stats for each team """
 	# These are reevaluated every week as averages change
+
+	year = 2019
 	
 	for each_team in teamlist.teams:
 		team = each_team['team']
@@ -157,11 +161,8 @@ def performance():
 		if losses == 'NULL':
 			losses = 0
 
-		if wins + losses == 0:
-			continue
-
 		# Get the points for in a win
-		cursor.execute("SELECT winning_score FROM games WHERE winning_team = %s", (team,))
+		cursor.execute("SELECT winning_score FROM games WHERE winning_team = %s AND year = %s", (team, year))
 		rows = cursor.fetchall()
 		count = cursor.rowcount
 		for i in range(count):
@@ -169,7 +170,7 @@ def performance():
 
 
 		# Get the points for in a loss
-		cursor.execute("SELECT losing_score FROM games WHERE losing_team = %s", (team,))
+		cursor.execute("SELECT losing_score FROM games WHERE losing_team = %s AND year = %s", (team, year))
 		rows = cursor.fetchall()
 		count = cursor.rowcount
 		for i in range(count):
@@ -177,7 +178,7 @@ def performance():
 
 
 		# Get the points against in a win
-		cursor.execute("SELECT losing_score FROM games WHERE winning_team = %s", (team,))
+		cursor.execute("SELECT losing_score FROM games WHERE winning_team = %s AND year = %s", (team, year))
 		rows = cursor.fetchall()
 		count = cursor.rowcount
 		for i in range(count):
@@ -185,11 +186,13 @@ def performance():
 
 
 		# Get the points against in a loss
-		cursor.execute("SELECT losing_score FROM games WHERE losing_team = %s", (team,))
+		cursor.execute("SELECT losing_score FROM games WHERE losing_team = %s AND year = %s", (team, year))
 		rows = cursor.fetchall()
 		count = cursor.rowcount
 		for i in range(count):
-			points_against.append(rows[i][0])
+			points_against.append(rows[i][0])		
+
+		# print(team, points_for, points_against)
 
 		# Assign weight factors
 		##########     This needs to be expanded further     ########## 
@@ -197,6 +200,7 @@ def performance():
 			weight = 1
 			weights.append(weight)
 			wts_sqrd.append(weight ** 2)
+
 
 
 		# Calculate averages of points for and points against
@@ -208,6 +212,9 @@ def performance():
 		wt_sum = sum(weights)
 		wts_sqrd_sum = sum(wts_sqrd)
 		denom = wt_sum - (wts_sqrd_sum / wt_sum)
+		if denom == 0:
+			denom = 1
+
 
 
 		for index, score in enumerate(points_for):
@@ -235,9 +242,11 @@ def performance():
 def style():
 	""" Award style points to all teams, regardless of outcome """
 
+	year = 2019
+
 	# Get game data for games which have not yet been "styled" 
 	# Style points remain the same throughout the season, they only need to be calculated twice
-	cursor.execute("SELECT * FROM games WHERE winning_style IS NULL")
+	cursor.execute("SELECT * FROM games WHERE winning_style IS NULL AND year = %s", (year,))
 	rows = cursor.fetchall()
 
 	for index, row in enumerate(rows):
@@ -357,7 +366,9 @@ def SOR():
 	SOR is revisited after every week, unlike style, or performance, which are updated only for the new games added. 
 	"""
 
-	cursor.execute("SELECT * FROM games WHERE winning_style IS NOT NULL")
+	year = 2019
+
+	cursor.execute("SELECT * FROM games WHERE winning_style IS NOT NULL AND year = %s", (year,))
 	rows = cursor.fetchall()
 
 	for index, row in enumerate(rows):
@@ -434,7 +445,9 @@ def SOR():
 def points():
 	""" Calculate the number a points a team should earn for their performance based on style and SOR """
 
-	cursor.execute("SELECT * FROM games")
+	year = 2019
+
+	cursor.execute("SELECT * FROM games WHERE year = %s", (year,))
 	rows = cursor.fetchall()
 
 	for index, row in enumerate(rows):
@@ -479,14 +492,14 @@ def points():
 	for each_team in teamlist.teams:
 	    team = each_team['team']
 
-	    cursor.execute("SELECT SUM(winning_total) FROM games WHERE winning_team = %s", (team,))
+	    cursor.execute("SELECT SUM(winning_total) FROM games WHERE winning_team = %s AND year = %s", (team, year))
 	    winning_points_list = cursor.fetchone()
 	    winning_points = winning_points_list[0]
 
 	    if winning_points == None:
 	        winning_points = 0
 
-	    cursor.execute("SELECT SUM(losing_total) FROM games WHERE losing_team = %s", (team,))
+	    cursor.execute("SELECT SUM(losing_total) FROM games WHERE losing_team = %s AND year = %s", (team, year))
 	    losing_points_list = cursor.fetchone()
 	    losing_points = losing_points_list[0]
 
@@ -620,6 +633,32 @@ def sos():
 '''
 
 
+def store_week():
+
+	cursor.execute("SELECT MAX(week) FROM weekly")
+	last_week = cursor.fetchone()
+
+	if last_week[0] == None:
+		this_week = 1
+	else:
+		this_week = last_week[0] + 1
+
+	cursor.execute("SELECT * FROM teams WHERE rank <= '25'")
+	rows = cursor.fetchall()
+
+	for row in rows:
+
+		cursor.execute("INSERT INTO weekly (team, wins, losses, points, rank, week) VALUES (%s, %s, %s, %s, %s, %s)", (row[0], row[1], 
+						row[2], row[3], row[4], this_week))
+
+	conn.commit()
+
+
+
+
+
+
+
 
 
 ####### All app routes are held below to be handled by flask #######
@@ -637,7 +676,7 @@ def top_25():
 
 	rows.sort(key=lambda x: x[4])
 	
-	return render_template("teams.html", rankings = rows, updated = updated)
+	return render_template("teams.html", rankings = rows, updated = updated, label = "Top 25")
 
 
 
@@ -651,7 +690,7 @@ def update():
 	updated = arrow.now().format('YYYY-MM-DD')
 
 	# Carry out these functions to update all the various data after the most recent games
-	games()
+	games(2019)
 	performance()
 	style()
 	SOR()
@@ -675,7 +714,7 @@ def all_teams():
 
 	rows.sort(key=lambda x: x[4])
 	
-	return render_template("teams.html", rankings = rows, updated = updated)
+	return render_template("teams.html", rankings = rows, updated = updated, label = "All Teams")
 
 
 
@@ -684,7 +723,9 @@ def all_teams():
 def all_games():
 	""" This route will display all game data up until this point in the season that the code is executed. """
 
-	cursor.execute("SELECT * FROM games")
+	year = 2019
+
+	cursor.execute("SELECT * FROM games WHERE year = %s", (year,))
 	rows = cursor.fetchall()
 
 	rows.sort(key = lambda x: x[4])
@@ -809,6 +850,8 @@ def team(team):
 
 	team_str = str(team)
 
+	year = 2019
+
 	if team_str not in settings.fbs_teams:
 		error = "The team you selected is an FCS team. This site only tracks FBS teams"
 		return render_template("error.html", Error = error)
@@ -843,7 +886,7 @@ def team(team):
 	team_obj = team_data(team, wins, losses, rank, points, conference, avg_pf, avg_pa)
 
 	# Select the team's record so far this season, both wins and losses
-	cursor.execute("SELECT * FROM games WHERE winning_team = %s", (team,))
+	cursor.execute("SELECT * FROM games WHERE winning_team = %s AND year = %s", (team, year))
 	team_win_info = cursor.fetchall()
 
 	for row in team_win_info:
@@ -869,7 +912,7 @@ def team(team):
 		games_list.append(data)
 	
 
-	cursor.execute("SELECT * FROM games WHERE losing_team = %s", (team,))
+	cursor.execute("SELECT * FROM games WHERE losing_team = %s AND year = %s", (team, 2019))
 	team_loss_info = cursor.fetchall()
 	
 	for row in team_loss_info:
@@ -913,7 +956,7 @@ def conference(conference):
 
 	rows.sort(key=lambda x: x[4])
 	
-	return render_template("teams.html", rankings = rows, updated = updated, conference = conference)
+	return render_template("teams.html", rankings = rows, updated = updated, label = conference)
 
 
 
@@ -1039,6 +1082,40 @@ def compare(poll):
 
 	# Render this data in a template
 	return render_template("compare.html", Poll = poll, table = comparison)
+
+
+
+
+
+@app.route("/history/<year>", methods=['GET'])
+def history(year):
+
+	cursor.execute("SELECT * FROM history WHERE year = %s", (year,))
+	rows = cursor.fetchall()
+
+	rows.sort(key=lambda x: x[4])
+
+	label = str(year) + ' - Final'
+
+	return render_template("teams.html", rankings = rows, label = label)
+
+
+
+
+
+@app.route("/week/<week>", methods = ['GET'])
+def week(week):
+
+	cursor.execute("SELECT * FROM weekly WHERE week = %s", (week,))
+	rows = cursor.fetchall()
+
+	rows.sort(key=lambda x: x[4])
+
+	label = "Week " + str(week)
+
+	return render_template("teams.html", rankings = rows, label = label)
+
+
 
 
 

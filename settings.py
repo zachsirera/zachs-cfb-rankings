@@ -8,7 +8,7 @@ fbs_teams = [ 'Air Force', 'Akron', 'Alabama', 'UAB', 'Appalachian St', 'Arizona
 'Clemson', 'Coastal Car', 'Colorado', 'Colorado St', 'Connecticut', 'Duke', 'E Michigan', 'East Carolina',
 'Florida Intl', 'Florida', 'FL Atlantic', 'Florida St', 'Fresno St', 'Georgia', 'Ga Southern', 'Georgia St', 
 'Georgia Tech', 'Hawaii', 'Houston', 'Illinois', 'Indiana', 'Iowa', 'Iowa St', 'Kansas', 'Kansas St', 
-'Kent', 'Kentucky', 'LSU', 'Louisiana Tech', 'ULL', 'ULM', 'Louisville', 'Marshall', 'Maryland', 
+'Kent', 'Kentucky', 'LSU', 'Louisiana Tech', 'Louisiana', 'ULM', 'Louisville', 'Marshall', 'Maryland', 
 'Massachusetts', 'Memphis', 'Miami FL', 'Miami OH', 'Michigan', 'Michigan St', 'MTSU', 'Minnesota', 
 'Mississippi', 'Mississippi St', 'Missouri', 'Navy', 'Nebraska', 'Nevada', 'UNLV', 'New Mexico', 
 'New Mexico St', 'North Carolina', 'NC State', 'North Texas', 'N Illinois', 'Northwestern', 

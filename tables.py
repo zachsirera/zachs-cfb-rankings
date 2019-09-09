@@ -10,7 +10,32 @@ import teamlist
 import settings
 
 
+# Extract database credentials from private file
+with open("dbparams.txt", "r") as file:
+    data = file.readlines()
 
+    params = []
+    for line in data:
+        words = line.split()
+        params.append(words)
+
+    host1 = str(params[0])
+    host = host1[2:-2]
+
+    database1 = str(params[1])
+    database = database1[2:-2]
+
+    user1 = str(params[2])
+    user = user1[2:-2]
+
+    password1 = str(params[3])
+    password = password1[2:-2]
+
+    url1 = str(params[4])
+    url = url1[2:-2]
+
+# Close dbparams.txt
+file.close()
 
 
 
@@ -145,14 +170,23 @@ def teams():
 def populate_teams():
     ''' This is a function to initially populate the teams table from the list at teamlist.py '''
 
-    import settings
+    import teamlist
 
-    for team in settings.fbs_teams:
-        cursor.execute("SELECT * FROM teams WHERE team = %s", (team,))
-        cursor.fetchall()
+     # Establish connection to PostgreSQL database
+    try:
+        conn = psycopg2.connect(f"host={host} dbname={database} user={user} password={password}")
+        # Establish a cursor to navigate the database
+        cur = conn.cursor()
+    except:
+        print("Database connection not made")
 
-        if cursor.rowcount == 0:
-            cursor.execute("INSERT INTO teams (team) VALUES (%s)", (team,))
+    for row in teamlist.teams:
+        team = row['team']
+        cur.execute("SELECT * FROM teams WHERE team = %s", (team,))
+        cur.fetchall()
+
+        if cur.rowcount == 0:
+            cur.execute("INSERT INTO teams (team) VALUES (%s)", (team,))
             conn.commit()
 
     return
@@ -184,9 +218,28 @@ def weekly():
     return
 
 
+def rename():
+    ''' This is a function to create a table in the database to hold games data '''
+
+    # Establish connection to PostgreSQL database
+    try:
+        conn = psycopg2.connect(f"host={host} dbname={database} user={user} password={password}")
+        # Establish a cursor to navigate the database
+        cur = conn.cursor()
+    except:
+        print("Database connection not made")
+
+    # Create desired table
+    cur.execute("""ALTER TABLE teams_2018 RENAME TO teams
+        """)
+    conn.commit()
+
+    return
 
 
-
+def year():
+    ''' This is a function to add a 'year' column to the '''
+    pass
 
 
 
