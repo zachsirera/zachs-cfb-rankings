@@ -241,6 +241,77 @@ def year():
     ''' This is a function to add a 'year' column to the '''
     pass
 
+def wins_n_losses():
+    ''' This is a function to update a teams wins and losses by cross referencing tables'''
 
+    # Establish connection to PostgreSQL database
+    try:
+        conn = psycopg2.connect(f"host={host} dbname={database} user={user} password={password}")
+        # Establish a cursor to navigate the database
+        cur = conn.cursor()
+    except:
+        print("Database connection not made")
+
+
+    cur.execute("SELECT * FROM games WHERE year = %s", (2019,))
+    rows = cur.fetchall()
+
+    winners = []
+    losers = []
+
+    for row in rows:
+        winners.append(row[0])
+        losers.append(row[2])
+
+    for team in winners:
+        wins =  winners.count(team)
+        cur.execute("UPDATE teams SET wins = %s WHERE team = %s", (wins, team))
+
+    for team in losers:
+        losses = losers.count(team)
+        cur.execute("UPDATE teams SET losses = %s WHERE team = %s", (losses, team))
+
+    conn.commit()
+
+
+def null_to_zero():
+    '''This is a function to replace all null variables in the wins and losses columns with 0s. 
+
+    Should have done this at the beginning.... Would have been easier.
+    '''
+
+    # Establish connection to PostgreSQL database
+    try:
+        conn = psycopg2.connect(f"host={host} dbname={database} user={user} password={password}")
+        # Establish a cursor to navigate the database
+        cur = conn.cursor()
+    except:
+        print("Database connection not made")
+
+
+    cur.execute("SELECT * FROM teams")
+    rows = cur.fetchall()
+
+    for row in rows:
+        team = row[0]
+        wins = row[1]
+        losses = row[2]
+
+        if wins == None:
+            new_wins = 0
+        else:
+            new_wins = wins
+
+        if losses == None:
+            new_losses = 0
+        else:
+            new_losses = losses
+
+        cur.execute("UPDATE teams SET wins = %s, losses = %s WHERE team = %s", (new_wins, new_losses, team))
+
+
+    conn.commit()
+
+null_to_zero()
 
 

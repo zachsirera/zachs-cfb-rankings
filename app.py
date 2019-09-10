@@ -650,8 +650,7 @@ def store_week():
 
 		cursor.execute("INSERT INTO weekly (team, wins, losses, points, rank, week) VALUES (%s, %s, %s, %s, %s, %s)", (row[0], row[1], 
 						row[2], row[3], row[4], this_week))
-
-	conn.commit()
+		conn.commit()
 
 
 

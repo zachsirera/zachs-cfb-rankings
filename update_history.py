@@ -15,3 +15,4 @@ import tables
 # app.store_week()
 
 # tables.populate_teams()
+tables.conferences()
