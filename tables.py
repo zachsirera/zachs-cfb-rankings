@@ -10,7 +10,32 @@ import teamlist
 import settings
 
 
+# Extract database credentials from private file
+with open("dbparams.txt", "r") as file:
+    data = file.readlines()
 
+    params = []
+    for line in data:
+        words = line.split()
+        params.append(words)
+
+    host1 = str(params[0])
+    host = host1[2:-2]
+
+    database1 = str(params[1])
+    database = database1[2:-2]
+
+    user1 = str(params[2])
+    user = user1[2:-2]
+
+    password1 = str(params[3])
+    password = password1[2:-2]
+
+    url1 = str(params[4])
+    url = url1[2:-2]
+
+# Close dbparams.txt
+file.close()
 
 
 
@@ -145,14 +170,23 @@ def teams():
 def populate_teams():
     ''' This is a function to initially populate the teams table from the list at teamlist.py '''
 
-    import settings
+    import teamlist
 
-    for team in settings.fbs_teams:
-        cursor.execute("SELECT * FROM teams WHERE team = %s", (team,))
-        cursor.fetchall()
+     # Establish connection to PostgreSQL database
+    try:
+        conn = psycopg2.connect(f"host={host} dbname={database} user={user} password={password}")
+        # Establish a cursor to navigate the database
+        cur = conn.cursor()
+    except:
+        print("Database connection not made")
 
-        if cursor.rowcount == 0:
-            cursor.execute("INSERT INTO teams (team) VALUES (%s)", (team,))
+    for row in teamlist.teams:
+        team = row['team']
+        cur.execute("SELECT * FROM teams WHERE team = %s", (team,))
+        cur.fetchall()
+
+        if cur.rowcount == 0:
+            cur.execute("INSERT INTO teams (team) VALUES (%s)", (team,))
             conn.commit()
 
     return
@@ -184,10 +218,100 @@ def weekly():
     return
 
 
+def rename():
+    ''' This is a function to create a table in the database to hold games data '''
+
+    # Establish connection to PostgreSQL database
+    try:
+        conn = psycopg2.connect(f"host={host} dbname={database} user={user} password={password}")
+        # Establish a cursor to navigate the database
+        cur = conn.cursor()
+    except:
+        print("Database connection not made")
+
+    # Create desired table
+    cur.execute("""ALTER TABLE teams_2018 RENAME TO teams
+        """)
+    conn.commit()
+
+    return
 
 
+def year():
+    ''' This is a function to add a 'year' column to the '''
+    pass
+
+def wins_n_losses():
+    ''' This is a function to update a teams wins and losses by cross referencing tables'''
+
+    # Establish connection to PostgreSQL database
+    try:
+        conn = psycopg2.connect(f"host={host} dbname={database} user={user} password={password}")
+        # Establish a cursor to navigate the database
+        cur = conn.cursor()
+    except:
+        print("Database connection not made")
 
 
+    cur.execute("SELECT * FROM games WHERE year = %s", (2019,))
+    rows = cur.fetchall()
 
+    winners = []
+    losers = []
+
+    for row in rows:
+        winners.append(row[0])
+        losers.append(row[2])
+
+    for team in winners:
+        wins =  winners.count(team)
+        cur.execute("UPDATE weekly SET wins = %s WHERE team = %s", (wins, team))
+
+    for team in losers:
+        losses = losers.count(team)
+        cur.execute("UPDATE weekly SET losses = %s WHERE team = %s", (losses, team))
+
+    conn.commit()
+
+
+def null_to_zero():
+    '''This is a function to replace all null variables in the wins and losses columns with 0s. 
+
+    Should have done this at the beginning.... Would have been easier.
+    '''
+
+    # Establish connection to PostgreSQL database
+    try:
+        conn = psycopg2.connect(f"host={host} dbname={database} user={user} password={password}")
+        # Establish a cursor to navigate the database
+        cur = conn.cursor()
+    except:
+        print("Database connection not made")
+
+
+    cur.execute("SELECT * FROM teams")
+    rows = cur.fetchall()
+
+    for row in rows:
+        team = row[0]
+        wins = row[1]
+        losses = row[2]
+
+        if wins == None:
+            new_wins = 0
+        else:
+            new_wins = wins
+
+        if losses == None:
+            new_losses = 0
+        else:
+            new_losses = losses
+
+        cur.execute("UPDATE teams SET wins = %s, losses = %s WHERE team = %s", (new_wins, new_losses, team))
+
+
+    conn.commit()
+
+wins_n_losses()
 
 

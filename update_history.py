@@ -1,19 +1,18 @@
-# This is a file that will handle the updating of the history table with data from the previous season
+# This is a throwaway file to update data as needed
 
-# Import the necessary modules
-import psycopg2
-
-# Import support files in the project directory 
-import settings
-import helpers
+import app
+import teamlist
+import tables
 
 
-def update_history():
+# app.games(2019)
 
-	helpers.db_connect()
+# app.performance()
+# app.style()
+# app.SOR()
+# app.points()
+# app.rank()
+# app.store_week()
 
-	return
-
-
-update_history()
-
+# tables.populate_teams()
+tables.conferences()

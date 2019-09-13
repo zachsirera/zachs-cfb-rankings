@@ -36,6 +36,11 @@
       text-align: center
     }
 
+    /*#bg {
+      background-color: #ebedf0;
+      width: 100vw;
+    }*/
+
     * {
       font-family: helvetica;
     }
@@ -64,11 +69,11 @@
     </button>
 
     <a class="nav-link dropdown-toggle dropright" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: white !important;">
-      2018
+      2019
     </a>
     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-      <a class="dropdown-item disabled" href="#">2019 - Coming Soon!</a>
-      <a class="dropdown-item" href="#">2018</a>
+      <a class="dropdown-item" href="/">2019</a>
+      <a class="dropdown-item" href="/history/2018">2018</a>
     </div>
 
     <div class="align-right">
@@ -137,7 +142,7 @@
     </div>
   </nav>
 
-  <div class="container" style="height: 100%">
+  <div id="bg" class="container" style="height: 100%">
   	<main>
   		{% block main %}{% endblock %}
   	</main>
