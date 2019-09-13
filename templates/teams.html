@@ -14,8 +14,17 @@
 
 	{% if label %}
 
-	<h1> {{ label }} </h1>
+		<h1> {{ label }} </h1>
 	
+	{% endif %}
+
+	{% if week_obj %}
+		<a href={{ url_for('week', week = week_obj[0]) }}>
+			Prev
+		</a>
+		<a href={{ url_for('week', week = week_obj[1]) }}>
+			Next
+		</a>
 	{% endif %}
 
 	<table class="table table-hover table-bordered">

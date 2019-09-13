@@ -265,11 +265,11 @@ def wins_n_losses():
 
     for team in winners:
         wins =  winners.count(team)
-        cur.execute("UPDATE teams SET wins = %s WHERE team = %s", (wins, team))
+        cur.execute("UPDATE weekly SET wins = %s WHERE team = %s", (wins, team))
 
     for team in losers:
         losses = losers.count(team)
-        cur.execute("UPDATE teams SET losses = %s WHERE team = %s", (losses, team))
+        cur.execute("UPDATE weekly SET losses = %s WHERE team = %s", (losses, team))
 
     conn.commit()
 
@@ -312,6 +312,6 @@ def null_to_zero():
 
     conn.commit()
 
-null_to_zero()
+wins_n_losses()
 
 

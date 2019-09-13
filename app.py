@@ -674,8 +674,11 @@ def top_25():
 	rows = cursor.fetchall()
 
 	rows.sort(key=lambda x: x[4])
+
+	year = 2019
+	label = "Top 25 - " + str(year)
 	
-	return render_template("teams.html", rankings = rows, updated = updated, label = "Top 25")
+	return render_template("teams.html", rankings = rows, updated = updated, label = label)
 
 
 
@@ -712,8 +715,11 @@ def all_teams():
 	rows = cursor.fetchall()
 
 	rows.sort(key=lambda x: x[4])
+
+	year = 2019
+	label = "All Teams - " + str(year)
 	
-	return render_template("teams.html", rankings = rows, updated = updated, label = "All Teams")
+	return render_template("teams.html", rankings = rows, updated = updated, label = label)
 
 
 
@@ -729,7 +735,9 @@ def all_games():
 
 	rows.sort(key = lambda x: x[4])
 
-	return render_template("games.html", games = rows, updated = updated)
+	label = "All Games - " + str(year)
+
+	return render_template("games.html", games = rows, updated = updated, label = label)
 
 
 
@@ -954,8 +962,11 @@ def conference(conference):
 	rows = cursor.fetchall()
 
 	rows.sort(key=lambda x: x[4])
+
+	year = 2019
+	label = conference + " - " + str(year)
 	
-	return render_template("teams.html", rankings = rows, updated = updated, label = conference)
+	return render_template("teams.html", rankings = rows, updated = updated, label = label)
 
 
 
@@ -1094,7 +1105,7 @@ def history(year):
 
 	rows.sort(key=lambda x: x[4])
 
-	label = str(year) + ' - Final'
+	label = str(year) + ' - Final Rankings'
 
 	return render_template("teams.html", rankings = rows, label = label)
 
@@ -1108,11 +1119,18 @@ def week(week):
 	cursor.execute("SELECT * FROM weekly WHERE week = %s", (week,))
 	rows = cursor.fetchall()
 
+	if len(rows) == 0:
+		error = "No data available for this week."
+		return render_template("error.html", Error = error)
+
 	rows.sort(key=lambda x: x[4])
 
-	label = "Week " + str(week)
+	year = 2019
+	label = str(year) + " Season - Week " + str(week)
 
-	return render_template("teams.html", rankings = rows, label = label)
+	week_obj = [int(week) - 1, int(week) + 1, int(week)]
+
+	return render_template("teams.html", rankings = rows, label = label, week_obj = week_obj)
 
 
 
