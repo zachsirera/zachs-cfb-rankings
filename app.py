@@ -133,11 +133,11 @@ def games(year):
 	conn.commit()
 
 
-def performance():
+def performance(year):
 	""" Compile previous performance stats for each team """
 	# These are reevaluated every week as averages change
 
-	year = 2019
+	# year = 2019
 	
 	for each_team in teamlist.teams:
 		team = each_team['team']
@@ -239,10 +239,10 @@ def performance():
 	conn.commit()
 
 	
-def style():
+def style(year):
 	""" Award style points to all teams, regardless of outcome """
 
-	year = 2019
+	# year = 2019
 
 	# Get game data for games which have not yet been "styled" 
 	# Style points remain the same throughout the season, they only need to be calculated twice
@@ -360,13 +360,13 @@ def style():
 
 
 
-def SOR():
+def SOR(year):
 	""" 
 	Calculate a weighting factor for a team's performance based on the perceived strength of the opponent.
 	SOR is revisited after every week, unlike style, or performance, which are updated only for the new games added. 
 	"""
 
-	year = 2019
+	# year = 2019
 
 	cursor.execute("SELECT * FROM games WHERE winning_style IS NOT NULL AND year = %s", (year,))
 	rows = cursor.fetchall()
@@ -442,10 +442,10 @@ def SOR():
 
 
 
-def points():
+def points(year):
 	""" Calculate the number a points a team should earn for their performance based on style and SOR """
 
-	year = 2019
+	# year = 2019
 
 	cursor.execute("SELECT * FROM games WHERE year = %s", (year,))
 	rows = cursor.fetchall()
