@@ -986,24 +986,22 @@ def compare(poll):
 	''' Compare the results of the poll to other established polls in the sport '''
 
 	# This is the first sunday of the cfb season. All weeks following this will end on a sunday.
-	day1 = datetime.date(2018, 9, 2)
+	day1 = datetime.date(2019, 9, 1)
 
 	# This is commented out. No longer needed as the season has ended. 
 
-	# # Get today's date 
-	# now = datetime.date.today()
+	# Get today's date 
+	now = datetime.date.today()
 
-	# # Calculate the most recent week of the season that rankings will have been published
-	# # This will be passed to the ESPN api
-	# delta = now - day1
-	# weeks = ceil((delta.days / 7) + 1)
-
-	weeks = 12
+	# Calculate the most recent week of the season that rankings will have been published
+	# This will be passed to the ESPN api
+	delta = now - day1
+	weeks = ceil((delta.days / 7) + 1)
 
 
 	# Compile the url for the ESPN rankings API
 	url = "http://site.api.espn.com/apis/site/v2/sports/football/college-football/rankings?"
-	params = {"seasons": 2018, "weeks": 1, "types": 2}
+	params = {"seasons": 2019, "weeks": weeks, "types": 2}
 
 	new_url = url + urllib.parse.urlencode(params)
 
