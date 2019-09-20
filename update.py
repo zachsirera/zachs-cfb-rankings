@@ -4,7 +4,7 @@
 import app
 import teamlist
 import tables
-
+import analyze
 
 
 
@@ -18,7 +18,7 @@ def update_weekly(year):
 	app.points(year)
 	app.rank()
 	app.store_week()
-	# app.chart()
+	analyze.chart()
 
 	return
 
