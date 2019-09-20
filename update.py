@@ -18,6 +18,7 @@ def update_weekly(year):
 	app.points(year)
 	app.rank()
 	app.store_week()
+	# app.chart()
 
 	return
 
@@ -30,6 +31,9 @@ def update_yearly():
 	# tables.conferences()
 
 	pass
+
+
+
 
 
 

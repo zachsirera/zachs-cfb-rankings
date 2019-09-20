@@ -2,18 +2,19 @@
 # Zach Sirera
 
 # import the necessary packages
-
 import requests
 import psycopg2
 import json
 import urllib
 import datetime
 import arrow
+import os
 
 # import support files in the project directory 
 import helpers
 import settings
 import teamlist
+import dbparams
 
 # import other modules from packages that are needed
 from lxml import html
@@ -238,7 +239,9 @@ def performance(year):
 	# Commit changes to database
 	conn.commit()
 
+	return
 	
+
 def style(year):
 	""" Award style points to all teams, regardless of outcome """
 
@@ -358,6 +361,9 @@ def style(year):
 	# Commit changes to database
 	conn.commit()
 
+	return
+
+
 
 
 def SOR(year):
@@ -439,6 +445,8 @@ def SOR(year):
 	# Commit changes to database
 	conn.commit()
 
+	return
+
 
 
 
@@ -513,6 +521,8 @@ def points(year):
 
 	conn.commit()
 
+	return
+
 
 
 
@@ -553,6 +563,10 @@ def rank():
 
 	# Commit changes to database
 	conn.commit()
+
+	return
+
+
 
 '''
 def sos():
@@ -630,6 +644,11 @@ def sos():
 		cursor.execute("UPDATE teams SET sos = %s WHERE team = %s", (sos, team))
 
 	conn.commit()
+
+	return
+
+
+
 '''
 
 
@@ -650,9 +669,10 @@ def store_week():
 
 		cursor.execute("INSERT INTO weekly (team, wins, losses, points, rank, week) VALUES (%s, %s, %s, %s, %s, %s)", (row[0], row[1], 
 						row[2], row[3], row[4], this_week))
-		conn.commit()
+	
+	conn.commit()
 
-
+	return
 
 
 
@@ -679,29 +699,6 @@ def top_25():
 	label = "Top 25 - " + str(year)
 	
 	return render_template("teams.html", rankings = rows, updated = updated, label = label)
-
-
-
-
-@app.route('/update', methods=['GET'])
-def update():
-	""" Update all databases with data from the most recent games and recalculate the necessary stats """
-
-	# Get today's date 
-	global updated
-	updated = arrow.now().format('YYYY-MM-DD')
-
-	# Carry out these functions to update all the various data after the most recent games
-	games(2019)
-	performance()
-	style()
-	SOR()
-	points()
-	rank()
-	# sos()
-
-	# Once complete, redirect the user to the page displaying the current top 25 
-	return redirect('/')
 
 
 
@@ -745,9 +742,6 @@ def all_games():
 @app.route('/chart', methods=['GET', 'POST'])
 def chart():
 	""" This route will generate a bar graph to graphically depict the score breakdown of the top 25 """
-
-	#plot = top_25.plot.barh(x='Team', y='Points')
-	#fig.savefig("plot.png")
 
 	return render_template("chart.html")
 
