@@ -216,7 +216,7 @@ def top25_plot():
 
 
 	fig = plt.figure(num=1)
-	fig.set_figheight(10)
+	fig.set_figheight(6)
 	fig.set_figwidth(10)
 	pos = np.arange(len(x))
 	plt.bar(pos, y, align='center', tick_label=x)
