@@ -1,24 +1,24 @@
 # This is a file to update data as needed for each week as well as for the new season
 
 # Import the needed files in the project directory.
-import app
 import teamlist
 import tables
 import analyze
+import data
 
 
 
 def update_weekly(year):
 	'''This is a function to update all of the tables with the latest data. '''
 
-	app.games(year)
-	app.performance(year)
-	app.style(year)
-	app.SOR(year)
-	app.points(year)
-	app.rank()
-	app.store_week()
-	analyze.chart()
+	data.games(year)
+	data.performance(year)
+	data.style(year)
+	data.SOR(year)
+	data.points(year)
+	data.rank()
+	data.store_week()
+	analyze.top25_plot()
 
 	return
 
@@ -34,7 +34,6 @@ def update_yearly():
 
 
 
-
-
-
-update_weekly(2019)
+if __name__ == '__main__':
+	
+	update_weekly(2019)

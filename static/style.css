@@ -8,3 +8,11 @@
 	position: absolute;
 	bottom: 0px;
 }
+
+.W {
+	color: green;
+}
+
+.L {
+	color: red;
+}

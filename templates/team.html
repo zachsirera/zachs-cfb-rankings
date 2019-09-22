@@ -27,7 +27,7 @@
 			<tr>
 				<th scope="col"> Date </th>
 				<th scope="col"> Opponent </th>
-				<th scope="col" style="text-align: center"> Outcome </th>
+				<th scope="col" style="text-align: center" > Outcome </th>
 				<th scope="col" style="text-align: center"> Points For </th>
 				<th scope="col" style="text-align: center"> Points Against </th>
 			</tr>
@@ -41,7 +41,7 @@
 						# {{ game.opponent_rank }} - {{ game.opponent }}
 					</a>
 				</td>
-				<td style="text-align: center"> {{ game.outcome }} </td>
+				<td style="text-align: center" class={{ game.outcome }}> {{ game.outcome }} </td>
 				<td style="text-align: center"> {{ game.points_for }} </td>
 				<td style="text-align: center"> {{ game.points_against }} </td>
 			</tr>

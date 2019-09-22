@@ -229,8 +229,6 @@ def top25_plot():
 	return
 
 
-
-
 top25_plot()
 
 # teams_list = get_teams(2018)
