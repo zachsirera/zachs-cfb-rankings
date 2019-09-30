@@ -12,13 +12,21 @@ def update_weekly(year):
 	'''This is a function to update all of the tables with the latest data. '''
 
 	data.games(year)
+	print("Games retrieved. Calculating performance...")
 	data.performance(year)
+	print("Performance done. Calculating style...")
 	data.style(year)
+	print("Style done. Calculating SOR...")
 	data.SOR(year)
+	print("SOR done. Awarding points...")
 	data.points(year)
+	print("Points done. Ranking...")
 	data.rank()
+	print("Ranks done. Storing data in history...")
 	data.store_week()
+	print("Data stored. Generating plot...")
 	analyze.top25_plot()
+	print("Done. Visit https://zachs-cfb-rankings.herokuapp.com")
 
 	return
 
