@@ -1,6 +1,6 @@
 arrow==0.12.1
 psycopg2==2.7.5
-urllib3==1.23
+urllib3==1.24.2
 datetime==4.3
 flask==1.0.2
 flask_session==0.3.1
